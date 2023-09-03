@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  # External Load Balancer
+  external-load-balancer:
+    build: ./external-load-balancer
+    ports:
+      - "8080:8080"
+
+  # Internal Load Balancer
+  internal-load-balancer:
+    build: ./internal-load-balancer
+
+  # Web Server 1
+  web-server-1:
+    build: ./web-server-1
+
+  # Web Server 2
+  web-server-2:
+    build: ./web-server-2
+
+  # Web Server 3
+  web-server-3:
+    build: ./web-server-3
+
+  # MySQL Database Component 1
+  mysql-db1:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: userDB
+    volumes:
+      - ./db-component-1/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysql-db2:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: userDB
+
+  # PostgreSQL Database Component 2
+  psql-db1:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: appDB
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./db-component-2/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  psql-db2:
+    image: postgres:alpine
+    environment:
+      POSTGRES_DB: appDB
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
